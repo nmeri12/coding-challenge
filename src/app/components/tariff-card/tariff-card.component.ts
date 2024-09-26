@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {Tariff} from "../../models/task.model";
 
 @Component({
   selector: 'app-tariff-card',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './tariff-card.component.scss'
 })
 export class TariffCardComponent {
+  @Input() tariff!: Tariff;
 
+  onClick() {
+    alert('Show tariff Info!')
+  }
 }
+

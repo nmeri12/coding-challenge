@@ -1,1 +1,77 @@
-<p>task-list works!</p>
+
+<div class="text-center pb-2"><h1>Tariff List</h1></div>
+
+<!-- Sort and filter section -->
+<div ngbAccordion class="pb-4">
+  <div ngbAccordionItem [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>Custom Sort & Filter</button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div ngbAccordionBody>
+        <ng-template>
+          <div class="row">
+<!--            filter search-->
+            <div class="form-group col-md-6">
+              <label for="sortSearch">Search by name or ID:</label>
+              <input
+                id="sortSearch"
+                type="text"
+                class="form-control"
+                placeholder="Search by name or ID..."
+                aria-label="Search by name"
+                aria-describedby="basic-addon2"
+                [(ngModel)]="searchQuery"
+                (ngModelChange)="filterTariffs()"
+              >
+            </div>
+
+<!--            sort-->
+            <div class="form-group col-md-6">
+            <app-sort-options-drop-down (sortChange)="onSortChange1($event)"></app-sort-options-drop-down>
+            </div>
+
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading spinner -->
+<ng-container *ngIf="loading; else content">
+  <div class="text-center pt-5">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Result list -->
+<ng-template #content>
+  <div class="border border-dark border-3">
+    <div class="p-3">
+      <ng-container *ngIf="errorMessage; else results">
+        <div class="text-center">
+          <p class="text-danger">{{ errorMessage }}</p>
+        </div>
+      </ng-container>
+      <ng-template #results>
+
+        <ng-container *ngIf="filteredTariffs.length; else empty">
+          <div *ngFor="let tariff of filteredTariffs | sortArray:sortField:sortOrder">
+            <app-tariff-card [tariff]="tariff"></app-tariff-card>
+          </div>
+        </ng-container>
+        <ng-template #empty>
+          <div class="text-center">
+            <p>No results found!</p>
+            <button *ngIf="tariffs.length" (click)="onReset()" type="button" class="btn btn-outline-danger">Reset Filter</button>
+          </div>
+        </ng-template>
+      </ng-template>
+
+    </div>
+  </div>
+</ng-template>
+
